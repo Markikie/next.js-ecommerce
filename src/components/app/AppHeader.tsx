@@ -1,5 +1,5 @@
 import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
+import AppButton from "./AppButton";
 
 const AppHeader = () => {
   return (
@@ -45,19 +45,10 @@ const AppHeader = () => {
               <span className="text-sm">10</span>
             </div>
             <div className="flex gap-4">
-              <Link
-                className="inline-flex justify-center gap-0.5 overflow-hidden rounded-full bg-zinc-900 px-3 py-1 text-sm/6 font-medium text-white transition hover:bg-zinc-700"
-                href="/contact"
-              >
-                ติดต่อเรา
-              </Link>
+              <AppButton text="ติดต่อเรา" href="/contact" />
+              <AppButton text="เข้าระบบ" href="/login" />
+              <AppButton text="สมัครสมาชิก" href="/signup" />
             </div>
-            <Link
-              className="inline-flex justify-center gap-0.5 overflow-hidden rounded-full bg-zinc-900 px-3 py-1 text-sm/6 font-medium text-white transition hover:bg-zinc-700"
-              href="/login"
-            >
-              เข้าระบบ
-            </Link>
           </div>
         </div>
       </div>
