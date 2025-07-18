@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
-import { kanit, k2d } from "../fonts";
+// import "../globals.css";
 import AppHeader from "@/components/app/AppHeader";
 
 export const metadata: Metadata = {
@@ -14,11 +13,9 @@ export default function FrontLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${k2d.variable},${kanit.variable}  antialiased`}>
-        <AppHeader />
-        {children}
-      </body>
-    </html>
+    <div>
+      <AppHeader />
+      {children}
+    </div>
   );
 }

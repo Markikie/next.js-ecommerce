@@ -1,5 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import AppButton from "./AppButton";
+import LogoutButton from "./LogoutButton";
 
 const AppHeader = () => {
   return (
@@ -49,6 +50,7 @@ const AppHeader = () => {
               <AppButton text="เข้าระบบ" href="/login" />
               <AppButton text="สมัครสมาชิก" href="/signup" />
             </div>
+            <LogoutButton />
           </div>
         </div>
       </div>

@@ -1,14 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
+  const router = useRouter();
   const handleSignUp = async () => {
     await authClient.signUp.email(
       {
-        email: "wryfe@example.com",
-        password: "123456",
-        name: "Use1 Doe",
+        email: "markiki@gmail.com",
+        password: "markiki0711",
+        name: "Marmink",
       },
       {
         onRequest: (ctx) => {
@@ -17,6 +19,8 @@ const SignupForm = () => {
         },
         onSuccess: (ctx) => {
           //redirect to the dashboard or sign in page
+          console.log("success", ctx.data);
+          router.replace("/login");
         },
         onError: (ctx) => {
           // display the error message
