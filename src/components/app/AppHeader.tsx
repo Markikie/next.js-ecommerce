@@ -1,8 +1,13 @@
 import { ShoppingCart } from "lucide-react";
 import AppButton from "./AppButton";
 import LogoutButton from "./LogoutButton";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
-const AppHeader = () => {
+const AppHeader = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <header>
       <div className="fixed inset-x-0 top-0 z-50 bg-white/50">
@@ -41,16 +46,23 @@ const AppHeader = () => {
             </svg>
           </div>
           <div className="flex items-center gap-5">
+            {session && (
+              <div className="flex gap-4">
+                ยินดีต้อนรับคุณ {session.user.name} ID: {session.user.email}
+              </div>
+            )}
             <div className="flex gap-1 p-1 border border-black rounded-sm">
               <ShoppingCart className="h-5 w-5" />
               <span className="text-sm">10</span>
             </div>
-            <div className="flex gap-4">
-              <AppButton text="ติดต่อเรา" href="/contact" />
-              <AppButton text="เข้าระบบ" href="/login" />
-              <AppButton text="สมัครสมาชิก" href="/signup" />
-            </div>
-            <LogoutButton />
+            <AppButton text="ติดต่อเรา" href="/contact" />
+            {!session && (
+              <div className="flex gap-4">
+                <AppButton text="เข้าระบบ" href="/login" />
+                <AppButton text="สมัครสมาชิก" href="/signup" />
+              </div>
+            )}
+            {session && <LogoutButton />}
           </div>
         </div>
       </div>

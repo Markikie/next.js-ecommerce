@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,11 +12,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+  const handleLogin = async () => {
+    await authClient.signIn.email(
+      {
+        email: "markiki@gmail.com",
+        password: "markiki0711",
+      },
+      {
+        onRequest: (ctx) => {
+          //show loading
+          console.log("loading...", ctx.body);
+        },
+        onSuccess: (ctx) => {
+          //redirect to the dashboard or sign in page
+          console.log("success", ctx.data);
+          router.replace("/");
+        },
+        onError: (ctx) => {
+          // display the error message
+          alert(ctx.error.message);
+        },
+      }
+    );
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -52,9 +81,6 @@ export function LoginForm({
                 <Button type="submit" className="w-full">
                   Login
                 </Button>
-                <Button variant="outline" className="w-full">
-                  Login with Google
-                </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
@@ -64,6 +90,9 @@ export function LoginForm({
               </Link>
             </div>
           </form>
+          <Button variant="outline" className="w-full" onClick={handleLogin}>
+            Login with Hard Code
+          </Button>
         </CardContent>
       </Card>
     </div>
