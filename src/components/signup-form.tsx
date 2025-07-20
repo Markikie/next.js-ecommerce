@@ -8,9 +8,9 @@ const SignupForm = () => {
   const handleSignUp = async () => {
     await authClient.signUp.email(
       {
-        email: "markiki@gmail.com",
-        password: "markiki0711",
-        name: "Marmink",
+        email: "admin@gmail.com",
+        password: "Admin1234",
+        name: "Admin",
       },
       {
         onRequest: (ctx) => {

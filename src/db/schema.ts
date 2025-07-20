@@ -4,6 +4,7 @@ import {
   text,
   timestamp,
   boolean,
+  mysqlEnum,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -14,6 +15,7 @@ export const user = mysqlTable("user", {
     .$defaultFn(() => false)
     .notNull(),
   image: text("image"),
+  role: mysqlEnum(["user", "admin"]).default("user"),
   createdAt: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
@@ -30,7 +32,7 @@ export const session = mysqlTable("session", {
   updatedAt: timestamp("updated_at").notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
-  userId: text("user_id")
+  userId: varchar("user_id", { length: 36 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
 });
@@ -39,7 +41,7 @@ export const account = mysqlTable("account", {
   id: varchar("id", { length: 36 }).primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
-  userId: text("user_id")
+  userId: varchar("user_id", { length: 36 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),

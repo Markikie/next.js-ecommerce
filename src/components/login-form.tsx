@@ -23,8 +23,8 @@ export function LoginForm({
   const handleLogin = async () => {
     await authClient.signIn.email(
       {
-        email: "markiki@gmail.com",
-        password: "markiki0711",
+        email: "admin@gmail.com",
+        password: "Admin1234",
       },
       {
         onRequest: (ctx) => {
