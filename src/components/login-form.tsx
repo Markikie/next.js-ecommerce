@@ -25,16 +25,24 @@ export function LoginForm({
       {
         email: "admin@gmail.com",
         password: "Admin1234",
+        // email: "markiki@gmail.com",
+        // password: "markiki0711",
       },
       {
         onRequest: (ctx) => {
           //show loading
           console.log("loading...", ctx.body);
         },
-        onSuccess: (ctx) => {
+        onSuccess: async (ctx) => {
           //redirect to the dashboard or sign in page
           console.log("success", ctx.data);
-          router.replace("/");
+          // get session client side
+          const { data: session } = await authClient.getSession();
+          if (session?.user.role === "user") {
+            router.replace("/");
+          } else {
+            router.replace("/dashboard");
+          }
         },
         onError: (ctx) => {
           // display the error message
