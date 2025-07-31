@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { kanit, k2d } from "./fonts";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${k2d.variable},${kanit.variable}  antialiased`}>
         {children}
+        <Toaster richColors />
       </body>
     </html>
   );

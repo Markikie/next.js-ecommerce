@@ -9,44 +9,63 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formSchema } from "@/lib/formShemas";
+import { useEffect } from "react";
+import { Form } from "./ui/form";
+import { FormInput } from "./form-input";
+import { IconLoader } from "@tabler/icons-react";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-  const handleLogin = async () => {
+
+  // react hook form
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    form.setFocus("email");
+  }, [form]);
+
+  // login button
+  const handleOnSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log(data);
     await authClient.signIn.email(
       {
-        email: "admin@gmail.com",
-        password: "Admin1234",
-        // email: "markiki@gmail.com",
-        // password: "markiki0711",
+        email: data.email,
+        password: data.password,
       },
       {
         onRequest: (ctx) => {
-          //show loading
           console.log("loading...", ctx.body);
         },
         onSuccess: async (ctx) => {
-          //redirect to the dashboard or sign in page
           console.log("success", ctx.data);
-          // get session client side
           const { data: session } = await authClient.getSession();
           if (session?.user.role === "user") {
+            toast.success("Welcome " + session.user.name);
             router.replace("/");
           } else {
             router.replace("/dashboard");
           }
         },
         onError: (ctx) => {
-          // display the error message
-          alert(ctx.error.message);
+          toast.error(ctx.error.message);
         },
       }
     );
@@ -62,45 +81,53 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-3">
+                  <FormInput
+                    control={form.control}
+                    name="email"
+                    label="Email"
+                    type="email"
+                    placeholder="m@example.com"
+                  />
                 </div>
-                <Input id="password" type="password" required />
+                <div className="grid gap-3">
+                  <FormInput
+                    control={form.control}
+                    name="password"
+                    label="Password"
+                    type="password"
+                    placeholder="Enter your password"
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={
+                      !form.formState.isValid || form.formState.isSubmitting
+                    }
+                  >
+                    {form.formState.isSubmitting ? (
+                      <IconLoader className="animate-spin" />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
+              <div className="mt-4 text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" className="underline underline-offset-4">
+                  Sign up
+                </Link>
               </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline underline-offset-4">
-                Sign up
-              </Link>
-            </div>
-          </form>
-          <Button variant="outline" className="w-full" onClick={handleLogin}>
-            Login with Hard Code
-          </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
