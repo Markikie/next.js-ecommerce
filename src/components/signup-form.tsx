@@ -19,6 +19,7 @@ import { signupSchema } from "@/lib/formShemas";
 import { useEffect } from "react";
 import { Form } from "./ui/form";
 import { FormInput } from "./form-input";
+import { toast } from "sonner";
 
 export function SignupForm({
   className,
@@ -56,10 +57,11 @@ export function SignupForm({
         },
         onSuccess: (ctx) => {
           console.log("success", ctx.data);
+          toast.success("Account created successfully");
           router.replace("/login");
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          toast.error(ctx.error.message);
         },
       }
     );

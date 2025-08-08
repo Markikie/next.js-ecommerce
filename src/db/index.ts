@@ -3,6 +3,11 @@ dotenv.config();
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 
+// drizzle schema and relatios for query features
+
+import * as schema from "./schema";
+import * as relations from "./relations";
+
 const dbSingleton = async () => {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -15,7 +20,14 @@ const dbSingleton = async () => {
     connectTimeout: 60000,
   });
 
-  return drizzle(connection, { mode: "default" });
+  return drizzle(connection, {
+    schema: {
+      ...schema,
+      ...relations,
+    },
+
+    mode: "default",
+  });
 };
 
 declare const globalThis: {
