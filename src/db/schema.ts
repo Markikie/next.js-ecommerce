@@ -15,17 +15,11 @@ export const user = mysqlTable("user", {
   id: varchar("id", { length: 36 }).primaryKey(),
   name: text("name").notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
-  emailVerified: boolean("email_verified")
-    .$defaultFn(() => false)
-    .notNull(),
+  emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
   role: mysqlEnum(["user", "admin"]).default("user"),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 });
 
 export const session = mysqlTable("session", {
@@ -64,18 +58,14 @@ export const verification = mysqlTable("verification", {
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
-  ),
-  updatedAt: timestamp("updated_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
-  ),
+  createdAt: timestamp("created_at"),
+  updatedAt: timestamp("updated_at"),
 });
 
 export const product = mysqlTable(
   "product",
   {
-    id: int().autoincrement().notNull(),
+    id: int().primaryKey().autoincrement().notNull(),
     title: varchar({ length: 255 }).notNull(),
     price: decimal({ precision: 10, scale: 2 }).notNull(),
     createdAt: timestamp("created_at", { mode: "string" }).default(
@@ -98,4 +88,24 @@ export const productImage = mysqlTable(
     ),
   },
   (table) => [primaryKey({ columns: [table.id], name: "product_image_id" })]
+);
+
+export const order = mysqlTable(
+  "order",
+  {
+    id: int().autoincrement().notNull(),
+    userId: varchar("user_id", { length: 36 })
+      .notNull()
+      .references(() => user.id),
+    productId: int("product_id")
+      .notNull()
+      .references(() => product.id),
+    price: decimal({ precision: 10, scale: 2 }).notNull(),
+    qty: int({ unsigned: true }).notNull(),
+    status: mysqlEnum(["pending", "paid", "delivered"]),
+    createdAt: timestamp("created_at", { mode: "string" }).default(
+      sql`(now())`
+    ),
+  },
+  (table) => [primaryKey({ columns: [table.id], name: "order_id" })]
 );

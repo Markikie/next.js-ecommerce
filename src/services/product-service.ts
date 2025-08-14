@@ -15,7 +15,7 @@ export async function getProductService() {
   });
 }
 export async function getProductByIdService(id: number) {
-  return await db.query.product.findFirst({
+  return await db.query.product.findMany({
     where: eq(product.id, id),
     orderBy: desc(product.id),
     with: {
