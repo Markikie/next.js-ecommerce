@@ -46,7 +46,7 @@ export default async function ProductDetailPage({
         <CarouselNext />
       </Carousel>
       <hr />
-      <AppCartButton />
+      <AppCartButton product={product} />
     </div>
   );
 }

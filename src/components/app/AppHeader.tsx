@@ -4,6 +4,7 @@ import LogoutButton from "./LogoutButton";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import AppCartTotal from "./AppCartTotal";
 
 const AppHeader = async () => {
   const session = await auth.api.getSession({
@@ -54,10 +55,13 @@ const AppHeader = async () => {
                 ยินดีต้อนรับคุณ {session.user.name} role:{session.user.role}
               </div>
             )}
-            <div className="flex gap-1 p-1 border border-black rounded-sm">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="text-sm">10</span>
-            </div>
+            <Link href="/cart">
+              <div className="flex gap-1 p-1 border border-black rounded-sm">
+                <ShoppingCart className="h-5 w-5" />
+
+                <AppCartTotal />
+              </div>
+            </Link>
             <AppButton text="ติดต่อเรา" href="/contact" />
             <AppButton text="สินค้าทั้งหมด" href="/product" />
             {!session && (
