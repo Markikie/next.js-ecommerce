@@ -2,8 +2,8 @@ import AppCartList from "@/components/app/AppCartList";
 
 export default function CartPage() {
   return (
-    <main>
+    <div className="max-w-4xl mx-auto">
       <AppCartList />
-    </main>
+    </div>
   );
 }
