@@ -1,7 +1,9 @@
+import DProduct from "@/app/(back)/dashboard/components/DProduct";
+
 export default function ProductPage() {
   return (
     <main>
-      <h1>Product</h1>
+      <DProduct />
     </main>
   );
 }
