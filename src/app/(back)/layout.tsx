@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { kanit, k2d } from "../fonts";
 import { Toaster } from "@/components/ui/sonner";
+import DLayout from "./dashboard/components/DLayout";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -17,7 +18,8 @@ export default function DashboardLayout({
   return (
     <html lang="en">
       <body className={`${k2d.variable},${kanit.variable}  antialiased`}>
-        {children}
+        <DLayout>{children}</DLayout>
+
         <Toaster richColors />
       </body>
     </html>
